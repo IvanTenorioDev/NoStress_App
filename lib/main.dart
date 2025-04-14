@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                     : Brightness.light,
               ),
               useMaterial3: true,
-              fontFamily: themeProvider.isDyslexicMode ? 'OpenDyslexic' : null,
+              fontFamily: themeProvider.isDyslexiaMode ? 'OpenDyslexic' : null,
             ),
             darkTheme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
                 brightness: Brightness.dark,
               ),
               useMaterial3: true,
-              fontFamily: themeProvider.isDyslexicMode ? 'OpenDyslexic' : null,
+              fontFamily: themeProvider.isDyslexiaMode ? 'OpenDyslexic' : null,
             ),
             themeMode: themeProvider.isDarkMode 
                 ? ThemeMode.dark 
