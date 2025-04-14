@@ -1,5 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Modelo simplificado para uso na tela de perfil
+class UserModel {
+  final String id;
+  final String name;
+  final String email;
+  final String photoUrl;
+  final DateTime createdAt;
+  
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    this.photoUrl = '',
+    required this.createdAt,
+  });
+}
+
 class User {
   final String id;
   final String name;
