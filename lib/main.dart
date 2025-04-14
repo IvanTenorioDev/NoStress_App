@@ -17,12 +17,14 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   
+  // Tente inicializar o Firebase, mas não falhe se não for possível
+  // Isso permitirá que o app seja executado sem Firebase para demonstração
   try {
-    // Inicializar Firebase (em um ambiente real, você usaria o firebase_options.dart)
     await Firebase.initializeApp();
+    print("Firebase inicializado com sucesso");
   } catch (e) {
-    debugPrint('Erro ao inicializar Firebase: $e');
-    // Tratar erro de inicialização do Firebase
+    print("Não foi possível inicializar o Firebase: $e");
+    print("A aplicação continuará em modo de demonstração");
   }
   
   runApp(const MyApp());
@@ -33,17 +35,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        Provider(create: (_) => AuthService()),
-      ],
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
       child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, _) {
+        builder: (context, themeProvider, child) {
           return MaterialApp(
             title: 'NoStress',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.teal,
+                brightness: themeProvider.isDarkMode 
+                    ? Brightness.dark 
+                    : Brightness.light,
+              ),
+              useMaterial3: true,
+              fontFamily: themeProvider.isDyslexicMode ? 'OpenDyslexic' : null,
+            ),
+            darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.teal,
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+              fontFamily: themeProvider.isDyslexicMode ? 'OpenDyslexic' : null,
+            ),
+            themeMode: themeProvider.isDarkMode 
+                ? ThemeMode.dark 
+                : ThemeMode.light,
+            home: const HomeScreen(),
             debugShowCheckedModeBanner: false,
-            theme: themeProvider.themeData,
             
             // Configurações de localização (para suporte ao Português)
             localizationsDelegates: const [
@@ -56,9 +76,6 @@ class MyApp extends StatelessWidget {
               Locale('en', 'US'),
             ],
             locale: const Locale('pt', 'BR'),
-            
-            // Tela inicial baseada na autenticação
-            home: const AuthenticationWrapper(),
           );
         },
       ),
